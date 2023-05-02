@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import pandas as pd
 
 df = pd.read_csv('./data/MNdataUtilization.csv')
