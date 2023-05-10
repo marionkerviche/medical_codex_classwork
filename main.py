@@ -10,24 +10,26 @@ df = pd.read_csv('./data/MNdataUtilization.csv')
 app = Flask(__name__)
 @app.route('/', methods=["GET"])
 def home():
-    return 'this is an API service for MN ICD code details'
+    return 'this is an API service for MN details'
 
 @app.route('/preview', methods=["GET"])
 def preview():
-    top10rows = df.head(1)
+    top10rows = df.head(10)
     result = top10rows.to_json(orient="records")
-    return top10rows
-# something is wrong here, go back and watch lecture
+    return result
 
-@app.route('/icd', methods=['GET'])
-def icdcode():
-    # R73 for example
-    filter_value = request.args.get(icdcode)
-    filtered = df[df['principal_diagnosis_code'] == filter_value]
+@app.route('/county_name/<value>', methods=['GET'])
+def county_name(value):
+   # filter_value = request.args.get(icdcode)
+    filtered = df[df['county_name'] == value]
   #  result = filtered.to_json(orient="records") 
     return filtered.to_json(orient="records") 
 
-#just look at code from zoom recording
+@app.route('/county_name/<value>/sex/<value2>')
+def county_name_2(value, value2):
+    filtered = df[df['county_name'] == value]
+    filtered2 = filtered[filtered['sex'] == value2]
+    return filtered2.to_json(orient="records")
 
 if __name__ == '__main__':
     app.run(debug=True)
